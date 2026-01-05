@@ -1,7 +1,15 @@
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Page() {
+export default async function Login() {
+  const session = await auth();
+
+  if (session) {
+    redirect("/dashboard");
+  }
+
   return (
     <section className="flex min-h-screen items-center justify-center">
       <div className="flex flex-col gap-4 text-center">
