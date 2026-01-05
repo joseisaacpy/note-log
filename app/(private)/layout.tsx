@@ -13,7 +13,7 @@ export default function PrivateLayout({
   }
   return (
     <>
-      <main>{children}</main>
+      <main className="flex-1">{children}</main>
     </>
   );
 }
