@@ -1,18 +1,14 @@
-import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse, NextRequest } from "next/server";
+import getSessionOrThrow from "@/lib/get-session-or-throw";
 
 export async function GET() {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
-  }
+  const session = await getSessionOrThrow();
 
   try {
     const notes = await prisma.diaryEntry.findMany({
       where: {
-        userId: session.user.id,
+        userId: session.user?.id,
       },
       orderBy: {
         date: "desc",
@@ -23,6 +19,9 @@ export async function GET() {
       data: notes,
     });
   } catch (error) {
+    if (error instanceof Error && error.message === "UNAUTHORIZED") {
+      return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+    }
     console.error(error);
     return NextResponse.json(
       { error: "Erro ao buscar notas" },
@@ -32,18 +31,14 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
-  }
+  const session = await getSessionOrThrow();
   try {
     const { content, date } = await request.json();
     const note = await prisma.diaryEntry.create({
       data: {
         content,
         date: new Date(date),
-        userId: session.user.id,
+        userId: session.user?.id,
         title: `Diário - ${new Date(date).toLocaleDateString("pt-BR")}`,
       },
     });
@@ -53,6 +48,9 @@ export async function POST(request: NextRequest) {
       data: note,
     });
   } catch (error) {
+    if (error instanceof Error && error.message === "UNAUTHORIZED") {
+      return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+    }
     console.error(error);
     return NextResponse.json({ error: "Erro ao criar nota" }, { status: 500 });
   }
