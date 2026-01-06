@@ -35,7 +35,7 @@ export default function NovaNota() {
   }
 
   return (
-    <section className="space-y-5 max-w-6xl mx-auto">
+    <section className="section">
       <h1 className="text-2xl font-bold">Nova nota</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Título (opcional) */}

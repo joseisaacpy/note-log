@@ -123,3 +123,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.section {
+  @apply mt-4 max-w-6xl mx-auto space-y-4;
+}
