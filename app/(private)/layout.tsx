@@ -11,9 +11,5 @@ export default function PrivateLayout({
   if (!session) {
     redirect("/api/auth/signin");
   }
-  return (
-    <>
-      <main className="flex-1">{children}</main>
-    </>
-  );
+  return <>{children}</>;
 }
