@@ -125,5 +125,5 @@
 }
 
 .section {
-  @apply mt-4 max-w-6xl mx-auto space-y-4;
+  @apply mt-4 max-w-6xl px-4 mx-auto space-y-4;
 }
